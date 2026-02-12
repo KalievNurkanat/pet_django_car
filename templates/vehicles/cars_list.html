@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="" method="get">
+    {% csrf_token %}
+    {{form.as_p}}   
+    <p>
+    <button type="submit">Search</button>
+    </p>
+
+</form>
+{% for car in cars %}
+<div class="card" style="width: 18rem;">
+
+{% if car.image %}
+  <img src="{{ car.image.url }}"  alt="">
+
+{% else %}
+  <img src="/static/Untitled.png "  alt="">
+
+{% endif %}
+  <div class="card-body">
+    <a href="/vehicles/{{car.id}}" class="btn btn-primary">Details</a>
+  </div>
+</div>
+
+{% endfor %}
+<div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
+  {% for page in max_pages %}
+  <a href="/vehicles/?page={{page}}" class="btn btn-primary">{{page}}</a> 
+  {% endfor %}
+</div>
+{% endblock %}
