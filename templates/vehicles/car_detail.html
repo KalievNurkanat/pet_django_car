@@ -15,9 +15,13 @@
 
     <p class="card-text">Description: {{ cars.description }}</p>
 
-        <p class="card-text">{{ cars.type }}</p>
+        <p class="card-text">Type: {{ cars.type }}</p>
+        <p class="card-text"> Price: {{ cars.price }}</p>
     {% if not request.user == cars.author %}
-    <a href="/profile/" class="btn btn-primary">Buy</a>
+    <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Buy</button>
+    </form>
     {% endif %}
 
     {% if request.user == cars.author %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from cars.forms import  CarForm, SearchForm
 from cars.models import Car
 from django.contrib.auth.decorators import login_required
-from common.validators import validate_age
+from common.validators import validate_age, validate_ballance
 
 # Create your views here.
 
@@ -66,10 +66,23 @@ def cars_list_view(request):
 
 @login_required(login_url="/login/")
 def car_detail_view(request, car_id):
+    cars = Car.objects.get(id=car_id)
     if request.method == "GET":
-        cars = Car.objects.get(id=car_id)
         return render(request, "vehicles/car_detail.html", context={"cars":cars})
     
+    if request.method == "POST":
+        if cars.author == request.user:
+            return redirect("/profile/")
+
+        try:
+            validate_ballance(request.user, cars)
+        except ValueError:
+            return HttpResponse("Not enough balance")
+
+        cars.author = request.user
+        cars.save()
+        return redirect("/profile/")
+
 
 def car_update_view(request, pk):
     car = Car.objects.get(id=pk, author=request.user)
@@ -83,6 +96,3 @@ def car_update_view(request, pk):
         form.save()
         return redirect('/profile/')
   
-
-
-       
