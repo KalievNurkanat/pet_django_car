@@ -24,7 +24,7 @@
 
       {% if request.user.is_authenticated %}
       <li class="nav-item">
-              <a class="nav-link" href="/profile/">Profile</a>
+              <a class="nav-link" href="/users/profile/">Profile</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/vehicles/create">Create a car</a>
@@ -34,18 +34,22 @@
               <a class="nav-link" href="/vehicles/">View cars</a>
             </li>
 
+             <li class="nav-item">
+              <a class="nav-link" href="/vehicles/sales/">Sales</a>
+            </li>
+
 
             <li class="nav-item">
-              <a class="nav-link" href="/logout">LogOut</a>
+              <a class="nav-link" href="/users/logout/">LogOut</a>
             </li>
 
             {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="/register">Register</a>
+              <a class="nav-link" href="/users/register/">Register</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="/login">Login</a>
+              <a class="nav-link" href="/users/login/">Login</a>
             </li>
            {% endif %}
 

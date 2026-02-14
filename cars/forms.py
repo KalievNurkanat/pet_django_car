@@ -4,7 +4,7 @@ from cars.models import Car, Type
 class CarForm(forms.ModelForm):
     class Meta:
         model = Car
-        fields = ("image", "mark", "description", "type", "price")
+        fields = ("image", "mark", "description", "type", "price", "is_for_sale")
 
     
 

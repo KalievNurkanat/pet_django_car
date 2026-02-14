@@ -16,6 +16,7 @@ class Car(models.Model):
     description = models.CharField(max_length=100, null=True)
     price = models.IntegerField(default=100)
     type = models.ForeignKey(Type, null=True, blank=True, on_delete=models.CASCADE)
+    is_for_sale = models.BooleanField(default=False)
   
 
     def __str__(self):

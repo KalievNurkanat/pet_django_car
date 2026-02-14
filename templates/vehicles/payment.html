@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card" style="width: 18rem;">
+
+{% if car.image %} 
+<img src="{{ car.image.url }}"  alt="Grocery image">
+
+{% else %}
+<img src="/static/Untitled.png "  alt="">
+
+{% endif %}
+  <div class="card-body">
+    <h5 class="card-title">Mark: {{ car.mark }}</h5>
+
+    <p class="card-text">Description: {{ car.description }}</p>
+
+        <p class="card-text">Type: {{ car.type }}</p>
+        <p class="card-text"> Price: {{ car.price }}</p>
+
+         <p class="card-text"> Is for sale: {{ car.is_for_sale }}</p>
+    {% if not request.user == car.author%}
+    <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Buy</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

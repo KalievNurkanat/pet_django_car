@@ -70,20 +70,60 @@ def car_detail_view(request, car_id):
     if request.method == "GET":
         return render(request, "vehicles/car_detail.html", context={"cars":cars})
     
+
+login_required(login_url="/login/")
+def sale_page_view(request):
+    cars = Car.objects.filter(is_for_sale=True)
+    limit = 5
+    form = SearchForm()
+    if request.method == "GET":
+        query_params = request.GET
+        search = query_params.get("search")
+        type_id = query_params.get("type_id")
+        page = int(query_params.get("page", 1))
+        if search:
+            cars = cars.filter(mark__icontains=search)
+
+        if type_id:
+            cars = cars.filter(type_id=type_id)  
+        
+        if page:
+            max_pages = cars.count() / limit
+            
+            if round(max_pages) < max_pages:
+                max_pages = round(max_pages) + 1
+
+            else:
+                max_pages = round(max_pages)
+                start = (page - 1) * limit
+                end = page * limit
+                cars = cars[start:end]
+        return render(request, "vehicles/sale_page.html", context={"cars":cars, "form":form, 
+                               "max_pages":range(1, max_pages + 1)})
+    
+
+login_required(login_url="/login/")
+def payment_view(request, car_id):
+    car = Car.objects.get(id = car_id)
+    if request.method == "GET":
+        return render(request, "vehicles/payment.html", context={"car":car})
     if request.method == "POST":
-        if cars.author == request.user:
-            return redirect("/profile/")
+        if car.author == request.user:
+            return redirect("/users/profile/")
 
         try:
-            validate_ballance(request.user, cars)
+            validate_ballance(request.user, car)
         except ValueError:
             return HttpResponse("Not enough balance")
 
-        cars.author = request.user
-        cars.save()
-        return redirect("/profile/")
+        car.author = request.user
+        car.is_for_sale = False
+        car.save()
+        return redirect("/users/profile/")
+    
 
 
+login_required(login_url="/login/")
 def car_update_view(request, pk):
     car = Car.objects.get(id=pk, author=request.user)
     if request.method == "GET":
