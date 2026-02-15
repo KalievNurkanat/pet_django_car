@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from users.models import Profile
 from cars.models import Car
 from users.models import CustomUser
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -48,7 +49,7 @@ def logout_view(request):
     logout(request)
     return render(request, "base.html")
 
-
+@login_required(login_url="/users/login/")
 def profile_view(request):
     if request.method == "GET":
         user = request.user

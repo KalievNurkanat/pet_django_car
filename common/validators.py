@@ -16,8 +16,17 @@ def validate_age(user):
         raise ValueError("U must be 18 years old")
     
 
-def validate_ballance(user, car):
-    if car.price > user.ballance:
+def validate_ballance(buyer, car):
+    if car.price > buyer.ballance:
         raise ValueError("Not enough balance")
-    user.ballance -= car.price
-    user.save()
+
+    seller = car.author
+
+    buyer.ballance -= car.price
+    seller.ballance += car.price
+
+    buyer.save()
+    seller.save()
+    
+
+

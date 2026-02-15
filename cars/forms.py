@@ -6,7 +6,11 @@ class CarForm(forms.ModelForm):
         model = Car
         fields = ("image", "mark", "description", "type", "price", "is_for_sale")
 
-    
+class CarSellForm(forms.ModelForm):
+    class Meta:
+        model = Car
+        fields = ("description", "price")
+        
 
 class SearchForm(forms.Form):
      search = forms.CharField(label="Search", required=False)

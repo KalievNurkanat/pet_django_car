@@ -26,6 +26,7 @@
 
     {% if request.user == cars.author %}
     <a href="/vehicles/{{cars.id}}/update" class="btn btn-primary">Update</a>
+    <a href="/vehicles/{{cars.id}}/sell" class="btn btn-primary">Sell</a>
     {% endif %}
   </div>
 </div>
