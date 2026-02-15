@@ -133,5 +133,5 @@ def car_update_view(request, pk):
         if not form.is_valid():
            return render(request, "vehicles/car_update.html", context={"form":form})
         form.save()
-        return redirect('/profile/')
+        return redirect('/users/profile/')
   
