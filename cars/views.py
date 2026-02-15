@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from common.validators import validate_age, validate_ballance
 
 # Create your views here.
-
 def home_view(request):
     if request.method == "GET":
         return render(request, "base.html")
@@ -71,7 +70,7 @@ def car_detail_view(request, car_id):
         return render(request, "vehicles/car_detail.html", context={"cars":cars})
     
 
-login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def sale_page_view(request):
     cars = Car.objects.filter(is_for_sale=True)
     limit = 5
@@ -102,7 +101,7 @@ def sale_page_view(request):
                                "max_pages":range(1, max_pages + 1)})
     
 
-login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def payment_view(request, car_id):
     car = Car.objects.get(id = car_id)
     if request.method == "GET":
@@ -123,7 +122,7 @@ def payment_view(request, car_id):
     
 
 
-login_required(login_url="/login/")
+@login_required(login_url="/login/")
 def car_update_view(request, pk):
     car = Car.objects.get(id=pk, author=request.user)
     if request.method == "GET":
