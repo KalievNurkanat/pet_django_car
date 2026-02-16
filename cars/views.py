@@ -3,6 +3,9 @@ from cars.forms import  CarForm, SearchForm, CarSellForm
 from cars.models import Car
 from django.contrib.auth.decorators import login_required
 from common.validators import validate_age, validate_ballance
+from common.permissions import author_required
+from django.shortcuts import get_object_or_404
+from cars.tasks import send_via_email
 
 # Create your views here.
 def home_view(request):
@@ -65,8 +68,8 @@ def cars_list_view(request):
 
 @login_required(login_url="/users/login/")
 def car_detail_view(request, car_id):
-    cars = Car.objects.get(id=car_id)
     if request.method == "GET":
+        cars = get_object_or_404(Car, id=car_id)
         return render(request, "vehicles/car_detail.html", context={"cars":cars})
     
 
@@ -100,7 +103,6 @@ def sales_page_view(request):
         return render(request, "vehicles/sale_page.html", context={"cars":cars, "form":form, 
                                "max_pages":range(1, max_pages + 1)})
     
-
 @login_required(login_url="/users/login/")
 def payment_view(request, car_id):
     car = Car.objects.get(id = car_id)
@@ -114,7 +116,8 @@ def payment_view(request, car_id):
             validate_ballance(request.user, car)
         except ValueError:
             return HttpResponse("Not enough balance")
-
+        
+        send_via_email(request.user, car)
         car.author = request.user
         car.is_for_sale = False
         car.save()
@@ -122,9 +125,10 @@ def payment_view(request, car_id):
     
 
 @login_required(login_url="/users/login/")
+@author_required
 def sell_car_view(request, car_id):
-    car = Car.objects.get(id=car_id)
-    if request.method == "GET":
+    car = get_object_or_404(Car, id=car_id)
+    if request.method == "GET": 
         form = CarSellForm(instance=car)
         return render(request, "vehicles/car_sale.html", context={"form":form})
     if request.method == "POST":
