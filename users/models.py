@@ -9,7 +9,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     password = models.CharField()
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    ballance = models.DecimalField(decimal_places=2, max_digits=10)
+    ballance = models.DecimalField(decimal_places=2, max_digits=12)
     birth_date = models.DateField()
     email = models.EmailField(unique=True)
 

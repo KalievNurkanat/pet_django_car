@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from common.validators import validate_age, validate_ballance
 from common.permissions import author_required
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 from cars.tasks import send_via_email
 
 # Create your views here.
@@ -34,74 +35,63 @@ def cars_create_view(request):
 
 @login_required(login_url="/users/login/")
 def cars_list_view(request):
-    form = SearchForm()
     cars = Car.objects.all()
-    limit = 3
+    form = SearchForm()
     if request.method == "GET":
         query_params = request.GET
         search = query_params.get("search")
         type_id = query_params.get("type_id")
-        page = int(query_params.get("page", 1))
-
+        
         if search:
             cars = cars.filter(mark__icontains=search)
 
         if type_id:
             cars = cars.filter(type_id=type_id)  
-        
-        if page:
-            max_pages = cars.count() / limit
             
-            if round(max_pages) < max_pages:
-                max_pages = round(max_pages) + 1
+        page = query_params.get("page")
+        paginator = Paginator(cars, 3)
+        page_obj = paginator.get_page(page)
 
-            else:
-                max_pages = round(max_pages)
-                start = (page - 1) * limit
-                end = page * limit
-                cars = cars[start:end]
-        
         return render(request, "vehicles/cars_list.html", 
-                      context={"cars":cars, "form":form, 
-                               "max_pages":range(1, max_pages + 1)})
+                      context={"cars":page_obj, "form":form, 
+                               "page_obj":page_obj})
 
 
 @login_required(login_url="/users/login/")
 def car_detail_view(request, car_id):
+    cars = get_object_or_404(Car, id=car_id)
     if request.method == "GET":
-        cars = get_object_or_404(Car, id=car_id)
         return render(request, "vehicles/car_detail.html", context={"cars":cars})
+    if request.method == "POST":
+
+        cars.is_for_sale = False
+        cars.save()
+
+        return redirect("/vehicles/")
+  
     
 
 @login_required(login_url="users/login/")
 def sales_page_view(request):
     cars = Car.objects.filter(is_for_sale=True)
-    limit = 5
     form = SearchForm()
     if request.method == "GET":
         query_params = request.GET
         search = query_params.get("search")
         type_id = query_params.get("type_id")
-        page = int(query_params.get("page", 1))
         if search:
             cars = cars.filter(mark__icontains=search)
 
         if type_id:
             cars = cars.filter(type_id=type_id)  
-        
-        if page:
-            max_pages = cars.count() / limit
-            
-            if round(max_pages) < max_pages:
-                max_pages = round(max_pages) + 1
 
-            else:
-                max_pages = round(max_pages)
-                start = (page - 1) * limit
-                end = page * limit
-                cars = cars[start:end]
-        return render(request, "vehicles/sale_page.html", context={"cars":cars, "form":form, 
-                               "max_pages":range(1, max_pages + 1)})
+        page = query_params.get("page")
+        paginator = Paginator(cars, 3)
+        pages = paginator.get_page(page)
+        
+        
+        return render(request, "vehicles/sale_page.html", context={"cars":pages, "form":form, 
+                               "pages":pages})
     
 @login_required(login_url="/users/login/")
 def payment_view(request, car_id):

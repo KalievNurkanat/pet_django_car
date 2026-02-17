@@ -22,11 +22,27 @@
     <a href="/vehicles/{{car.id}}/detail/" class="btn btn-primary">Details</a>
   </div>
 </div>
-
 {% endfor %}
+
 <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
-  {% for page in max_pages %}
-  <a href="/vehicles/?page={{page}}" class="btn btn-primary">{{page}}</a> 
+  {% for page in page_obj.paginator.page_range %}
+  <a href="?page={{page}}" class="btn btn-primary">{{page}}</a> 
   {% endfor %}
 </div>
+<!-- 
+<div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">Previous</a>
+  {% endif %}
+
+  <span class="btn btn-secondary">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+  </span>
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">Next</a>
+  {% endif %}
+</div>
+
+</div> -->
 {% endblock %}
