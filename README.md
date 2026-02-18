@@ -101,8 +101,8 @@ Celery runs asynchronously using Redis as a broker.
 
 🚀 How to Run the Project
 1️⃣ Clone repository
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+git clone https://github.com/KalievNurkanat/pet_django_car
+cd project_name
 
 2️⃣ Create virtual environment
 python -m venv venv
