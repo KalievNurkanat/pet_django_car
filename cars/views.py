@@ -68,7 +68,6 @@ def car_detail_view(request, car_id):
         cars.save()
 
         return redirect("/vehicles/")
-  
     
 
 @login_required(login_url="users/login/")

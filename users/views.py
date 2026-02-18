@@ -39,7 +39,7 @@ def login_view(request):
            return render(request, "user/login.html", context={"form":form})
         user = authenticate(**form.cleaned_data)
         if not user:
-            form.add_error(None, "Invalid password or username")
+            form.add_error(None, "Invalid password or email")
             return render(request, "user/login.html", context={"form":form})
         login(request, user)
         return redirect("/")

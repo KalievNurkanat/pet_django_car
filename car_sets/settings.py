@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
@@ -149,6 +149,5 @@ CELERY_RESULT_BACKEND="redis://127.0.0.1:6379/6"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_SEND_TO = os.environ.get("EMAIL")
 EMAIL_HOST_USER = os.environ.get("HOST_EMAIL")
 EMAIL_HOST_PASSWORD = os.environ.get("APP_CODE")

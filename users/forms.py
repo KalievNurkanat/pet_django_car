@@ -4,7 +4,7 @@ from users.models import CustomUser
 class RegistrationForm(forms.Form):
     image = forms.ImageField(label='image', required=False)
     username = forms.CharField(label="Username", max_length=25)
-    email = forms.EmailField()
+    email = forms.EmailField(label="Email", max_length=55)
     password = forms.CharField(label="Password")
     confirm_password = forms.CharField(label="Confirm Password")
     ballance = forms.DecimalField(label="Ballance", max_digits=10, decimal_places=2)

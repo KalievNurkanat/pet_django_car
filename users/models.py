@@ -7,7 +7,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     image = models.ImageField(null=True, blank=True)
     username = models.CharField(max_length=20)
     password = models.CharField()
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     ballance = models.DecimalField(decimal_places=2, max_digits=12)
     birth_date = models.DateField()
