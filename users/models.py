@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
 from users.managers import CustomUserManager
+from django.db.models import Q
+from django.db.models.functions import Now
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     image = models.ImageField(null=True, blank=True)
@@ -17,6 +19,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["birth_date", ]
+
+    class Meta:
+        db_table = "my_users"        
+        constraints = [
+            models.CheckConstraint(
+                check=Q(birth_date__lte=Now()),
+                name="birth_date_not_future"
+            )
+        ]
 
     def __str__(self):
         return f"{self.username}"
